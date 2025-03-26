@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useAuth } from "../../context/auth-context";
 import { useLanguageContext } from "../../context/language-context";
 import { useTranslation } from "../../lib/translations";
+import { hasPermission, type Permission } from "@/lib/permissions";
 
 interface SidebarProps {
   currentPage: string;
@@ -11,18 +12,59 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ currentPage, setCurrentPage }: SidebarProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { language, isRTL } = useLanguageContext();
   const { t } = useTranslation(language);
 
   const navItems = [
-    { label: "Dashboard", path: "/", icon: "dashboard", translation: t("dashboard") },
-    { label: "Clients", path: "/clients", icon: "people", translation: t("clients") },
-    { label: "Orders", path: "/orders", icon: "shopping_cart", translation: t("orders") },
-    { label: "Invoices", path: "/invoices", icon: "receipt", translation: t("invoices") },
-    { label: "Reports", path: "/reports", icon: "bar_chart", translation: t("reports") },
-    { label: "Settings", path: "/settings", icon: "settings", translation: t("settings") },
+    { 
+      label: "Dashboard", 
+      path: "/", 
+      icon: "dashboard", 
+      translation: t("dashboard"),
+      permission: "view_dashboard" as Permission
+    },
+    { 
+      label: "Clients", 
+      path: "/clients", 
+      icon: "people", 
+      translation: t("clients"),
+      permission: "view_clients" as Permission
+    },
+    { 
+      label: "Orders", 
+      path: "/orders", 
+      icon: "shopping_cart", 
+      translation: t("orders"),
+      permission: "view_orders" as Permission
+    },
+    { 
+      label: "Invoices", 
+      path: "/invoices", 
+      icon: "receipt", 
+      translation: t("invoices"),
+      permission: "view_invoices" as Permission
+    },
+    { 
+      label: "Reports", 
+      path: "/reports", 
+      icon: "bar_chart", 
+      translation: t("reports"),
+      permission: "view_reports" as Permission
+    },
+    { 
+      label: "Settings", 
+      path: "/settings", 
+      icon: "settings", 
+      translation: t("settings"),
+      permission: "view_settings" as Permission
+    },
   ];
+
+  // Filter navigation items based on user permissions
+  const filteredNavItems = navItems.filter(item => 
+    hasPermission(user, item.permission)
+  );
 
   return (
     <aside className="bg-white dark:bg-neutral-800 w-full md:w-64 md:min-h-screen shadow-md md:flex md:flex-col hidden md:block" dir={isRTL ? "rtl" : "ltr"}>
@@ -35,7 +77,7 @@ export default function Sidebar({ currentPage, setCurrentPage }: SidebarProps) {
       </div>
       <nav className="py-4">
         <ul>
-          {navItems.map((item) => (
+          {filteredNavItems.map((item) => (
             <li className="mb-1" key={item.label}>
               <Link
                 href={item.path}
@@ -59,10 +101,19 @@ export default function Sidebar({ currentPage, setCurrentPage }: SidebarProps) {
             <div className={`w-10 h-10 rounded-full bg-primary-dark text-white flex items-center justify-center ${isRTL ? 'ml-3' : 'mr-3'}`}>
               {user.name.charAt(0).toUpperCase()}
             </div>
-            <div>
+            <div className="flex-grow">
               <p className="text-sm font-medium">{user.name}</p>
               <p className="text-xs text-neutral-400 dark:text-neutral-500">{t(user.role.toLowerCase() as any)}</p>
             </div>
+            <button 
+              onClick={logout}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded-full"
+              title={t("logOut")}
+            >
+              <span className="material-icons text-neutral-500 dark:text-neutral-400 text-sm">
+                logout
+              </span>
+            </button>
           </div>
         </div>
       )}

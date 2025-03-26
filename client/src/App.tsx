@@ -3,8 +3,9 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "./context/auth-context";
+import { AuthProvider, useAuth } from "./context/auth-context";
 import { LanguageProvider } from "./context/language-context";
+import { ProtectedRoute } from "@/components/auth/protected-route";
 
 // Pages
 import Dashboard from "@/pages/dashboard";
@@ -22,6 +23,15 @@ import Header from "@/components/layout/header";
 
 function Router() {
   const [currentPage, setCurrentPage] = useState<string>("Dashboard");
+  const { isLoading } = useAuth();
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-50 dark:bg-neutral-900">
@@ -32,27 +42,51 @@ function Router() {
           <Switch>
             <Route path="/" component={() => {
               setCurrentPage("Dashboard");
-              return <Dashboard />;
+              return (
+                <ProtectedRoute requiredPermission="view_dashboard">
+                  <Dashboard />
+                </ProtectedRoute>
+              );
             }} />
             <Route path="/clients" component={() => {
               setCurrentPage("Clients");
-              return <Clients />;
+              return (
+                <ProtectedRoute requiredPermission="view_clients">
+                  <Clients />
+                </ProtectedRoute>
+              );
             }} />
             <Route path="/orders" component={() => {
               setCurrentPage("Orders");
-              return <Orders />;
+              return (
+                <ProtectedRoute requiredPermission="view_orders">
+                  <Orders />
+                </ProtectedRoute>
+              );
             }} />
             <Route path="/invoices" component={() => {
               setCurrentPage("Invoices");
-              return <Invoices />;
+              return (
+                <ProtectedRoute requiredPermission="view_invoices">
+                  <Invoices />
+                </ProtectedRoute>
+              );
             }} />
             <Route path="/reports" component={() => {
               setCurrentPage("Reports");
-              return <Reports />;
+              return (
+                <ProtectedRoute requiredPermission="view_reports">
+                  <Reports />
+                </ProtectedRoute>
+              );
             }} />
             <Route path="/settings" component={() => {
               setCurrentPage("Settings");
-              return <Settings />;
+              return (
+                <ProtectedRoute requiredPermission="view_settings">
+                  <Settings />
+                </ProtectedRoute>
+              );
             }} />
             <Route component={NotFound} />
           </Switch>

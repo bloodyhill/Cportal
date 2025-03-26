@@ -15,6 +15,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
+import { hasPermission } from "@/lib/permissions";
 
 type ProfileFormValues = {
   name: string;
