@@ -127,7 +127,11 @@ export class MemStorage implements IStorage {
 
   async createClient(insertClient: InsertClient): Promise<Client> {
     const id = this.clientId++;
-    const client: Client = { ...insertClient, id };
+    const client: Client = { 
+      ...insertClient, 
+      id,
+      notes: insertClient.notes || null
+    };
     this.clients.set(id, client);
     return client;
   }
@@ -204,7 +208,13 @@ export class MemStorage implements IStorage {
 
   async createInvoice(insertInvoice: InsertInvoice): Promise<Invoice> {
     const id = this.invoiceId++;
-    const invoice: Invoice = { ...insertInvoice, id };
+    const invoice: Invoice = { 
+      ...insertInvoice, 
+      id,
+      status: insertInvoice.status || "pending",
+      notes: insertInvoice.notes || null,
+      pdfPath: insertInvoice.pdfPath || null
+    };
     this.invoices.set(id, invoice);
     return invoice;
   }

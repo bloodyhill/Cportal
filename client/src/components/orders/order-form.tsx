@@ -34,25 +34,23 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
     defaultValues: {
       clientId: order?.clientId || 0,
       title: order?.title || "",
-      description: order?.description || "",
-      tweetUrl: order?.tweetUrl || "",
+      description: order?.description || null,
+      tweetUrl: order?.tweetUrl || null,
       status: order?.status || "pending",
       value: order?.value || 0,
-      orderDate: order ? new Date(order.orderDate) : new Date(),
+      orderDate: order?.orderDate || new Date().toISOString().split('T')[0],
     },
   });
 
   async function onSubmit(data: InsertOrder) {
     setIsSubmitting(true);
     try {
-      // Convert date object to a proper date string (YYYY-MM-DD) for API submission
+      // Ensure data has proper string values where null might be used
       const formattedData = {
         ...data,
-        orderDate: data.orderDate instanceof Date 
-          ? data.orderDate.toISOString().split('T')[0] 
-          : typeof data.orderDate === 'string' 
-            ? data.orderDate
-            : new Date().toISOString().split('T')[0],
+        description: data.description || null,
+        tweetUrl: data.tweetUrl || null,
+        // Order date is already a string from the form input
       };
       
       if (isEdit && order) {
@@ -173,7 +171,11 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Detailed description of the order..." {...field} />
+                    <Textarea 
+                      placeholder="Detailed description of the order..." 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -187,7 +189,11 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
                 <FormItem>
                   <FormLabel>Tweet URL</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. https://twitter.com/username/status/123456789" {...field} />
+                    <Input 
+                      placeholder="e.g. https://twitter.com/username/status/123456789" 
+                      {...field} 
+                      value={field.value || ''} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -232,9 +238,9 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
                       <Input 
                         type="date" 
                         {...field}
-                        value={field.value instanceof Date ? field.value.toISOString().split('T')[0] : ''}
+                        value={typeof field.value === 'string' ? field.value : ''}
                         onChange={(e) => {
-                          field.onChange(new Date(e.target.value));
+                          field.onChange(e.target.value);
                         }}
                       />
                     </FormControl>
