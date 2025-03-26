@@ -384,7 +384,9 @@ export default function Settings() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <FormLabel>Username</FormLabel>
+                    <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Username
+                    </label>
                     <Input
                       name="username"
                       value={newUserForm.username}
@@ -394,7 +396,9 @@ export default function Settings() {
                   </div>
                   
                   <div>
-                    <FormLabel>Password</FormLabel>
+                    <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Password
+                    </label>
                     <Input
                       type="password"
                       name="password"
@@ -407,7 +411,9 @@ export default function Settings() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <FormLabel>Name</FormLabel>
+                    <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Name
+                    </label>
                     <Input
                       name="name"
                       value={newUserForm.name}
@@ -417,7 +423,9 @@ export default function Settings() {
                   </div>
                   
                   <div>
-                    <FormLabel>Email</FormLabel>
+                    <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Email
+                    </label>
                     <Input
                       type="email"
                       name="email"
@@ -429,7 +437,9 @@ export default function Settings() {
                 </div>
                 
                 <div className="mb-4">
-                  <FormLabel>Role</FormLabel>
+                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Role
+                  </label>
                   <Select
                     value={newUserForm.role}
                     onValueChange={handleRoleChange}

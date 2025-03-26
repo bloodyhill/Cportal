@@ -45,10 +45,14 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
   async function onSubmit(data: InsertOrder) {
     setIsSubmitting(true);
     try {
-      // Convert date object to ISO string for API submission
+      // Convert date object to a proper date string (YYYY-MM-DD) for API submission
       const formattedData = {
         ...data,
-        orderDate: data.orderDate instanceof Date ? data.orderDate.toISOString() : data.orderDate,
+        orderDate: data.orderDate instanceof Date 
+          ? data.orderDate.toISOString().split('T')[0] 
+          : typeof data.orderDate === 'string' 
+            ? data.orderDate
+            : new Date().toISOString().split('T')[0],
       };
       
       if (isEdit && order) {
