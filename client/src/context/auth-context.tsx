@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 
-interface AuthUser {
+export interface AuthUser {
   id: number;
   username: string;
   name: string;

@@ -48,11 +48,30 @@ export function InvoiceForm({ open, onOpenChange, invoice, isEdit = false }: Inv
     try {
       const formData = new FormData();
       
+      console.log("Original invoice data:", data);
+      
+      // Ensure dates are properly formatted as strings for API submission
+      const processedData = {
+        ...data,
+        dueDate: data.dueDate instanceof Date 
+          ? data.dueDate.toISOString().split('T')[0] 
+          : typeof data.dueDate === 'string' 
+            ? data.dueDate 
+            : new Date().toISOString().split('T')[0],
+        issueDate: data.issueDate instanceof Date 
+          ? data.issueDate.toISOString().split('T')[0] 
+          : typeof data.issueDate === 'string' 
+            ? data.issueDate 
+            : new Date().toISOString().split('T')[0],
+        notes: data.notes || "",
+        pdfPath: data.pdfPath || "",
+      };
+      
+      console.log("Processed invoice data:", processedData);
+      
       // Add form data
-      Object.entries(data).forEach(([key, value]) => {
-        if (value instanceof Date) {
-          formData.append(key, value.toISOString().split('T')[0]);
-        } else if (value !== null && value !== undefined) {
+      Object.entries(processedData).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
           formData.append(key, value.toString());
         }
       });
@@ -62,23 +81,32 @@ export function InvoiceForm({ open, onOpenChange, invoice, isEdit = false }: Inv
         formData.append('pdf', file);
       }
 
+      let response;
       if (isEdit && invoice) {
-        await fetch(`/api/invoices/${invoice.id}`, {
+        response = await fetch(`/api/invoices/${invoice.id}`, {
           method: 'PUT',
           body: formData,
           credentials: 'include'
         });
+        
+        if (!response.ok) {
+          throw new Error(`Error updating invoice: ${response.statusText}`);
+        }
         
         toast({
           title: "Invoice updated",
           description: "Invoice has been updated successfully",
         });
       } else {
-        await fetch('/api/invoices', {
+        response = await fetch('/api/invoices', {
           method: 'POST',
           body: formData,
           credentials: 'include'
         });
+        
+        if (!response.ok) {
+          throw new Error(`Error creating invoice: ${response.statusText}`);
+        }
         
         toast({
           title: "Invoice created",

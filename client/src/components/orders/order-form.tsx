@@ -45,13 +45,20 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
   async function onSubmit(data: InsertOrder) {
     setIsSubmitting(true);
     try {
-      // Ensure data has proper string values where null might be used
+      // Ensure data has proper values and date formatting
       const formattedData = {
         ...data,
         description: data.description || null,
         tweetUrl: data.tweetUrl || null,
-        // Order date is already a string from the form input
+        // Ensure orderDate is properly formatted
+        orderDate: data.orderDate instanceof Date 
+          ? data.orderDate.toISOString().split('T')[0] 
+          : typeof data.orderDate === 'string' 
+            ? data.orderDate 
+            : new Date().toISOString().split('T')[0]
       };
+      
+      console.log("Submitting order with data:", formattedData);
       
       if (isEdit && order) {
         await apiRequest("PUT", `/api/orders/${order.id}`, formattedData);

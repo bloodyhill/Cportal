@@ -112,15 +112,27 @@ export const orderFormSchema = insertOrderSchema.extend({
   clientId: z.number().min(1, "Client is required"),
   title: z.string().min(2, "Title must be at least 2 characters"),
   value: z.number().min(0, "Value must be a positive number"),
-  orderDate: z.date(),
+  orderDate: z.string().or(z.date()).pipe(
+    z.coerce.date({
+      errorMap: () => ({ message: "Please enter a valid date" })
+    })
+  ),
 });
 
 export const invoiceFormSchema = insertInvoiceSchema.extend({
   orderId: z.number().min(1, "Order is required"),
   invoiceNumber: z.string().min(2, "Invoice number is required"),
   amount: z.number().min(0, "Amount must be a positive number"),
-  issueDate: z.date(),
-  dueDate: z.date(),
+  issueDate: z.string().or(z.date()).pipe(
+    z.coerce.date({
+      errorMap: () => ({ message: "Please enter a valid issue date" })
+    })
+  ),
+  dueDate: z.string().or(z.date()).pipe(
+    z.coerce.date({
+      errorMap: () => ({ message: "Please enter a valid due date" })
+    })
+  ),
 });
 
 export const userFormSchema = insertUserSchema.extend({

@@ -60,7 +60,16 @@ type TranslationKeys =
   | "currentPassword"
   | "newPassword"
   | "confirmPassword"
-  | "updatePassword";
+  | "updatePassword"
+  | "username"
+  | "role"
+  | "admin"
+  | "user"
+  | "editor"
+  | "viewer"
+  | "accessDenied"
+  | "insufficientPermissions"
+  | "roleDescription";
 
 export const translations: Record<Language, Record<TranslationKeys, string>> = {
   en: {
@@ -123,7 +132,16 @@ export const translations: Record<Language, Record<TranslationKeys, string>> = {
     currentPassword: "Current Password",
     newPassword: "New Password",
     confirmPassword: "Confirm Password",
-    updatePassword: "Update Password"
+    updatePassword: "Update Password",
+    username: "Username",
+    role: "Role",
+    admin: "Administrator",
+    user: "User",
+    editor: "Editor",
+    viewer: "Viewer",
+    accessDenied: "Access Denied",
+    insufficientPermissions: "Insufficient Permissions",
+    roleDescription: "Determines user access level"
   },
   ar: {
     dashboard: "لوحة المعلومات",
@@ -185,7 +203,16 @@ export const translations: Record<Language, Record<TranslationKeys, string>> = {
     currentPassword: "كلمة المرور الحالية",
     newPassword: "كلمة المرور الجديدة",
     confirmPassword: "تأكيد كلمة المرور",
-    updatePassword: "تحديث كلمة المرور"
+    updatePassword: "تحديث كلمة المرور",
+    username: "اسم المستخدم",
+    role: "الدور",
+    admin: "مدير",
+    user: "مستخدم",
+    editor: "محرر",
+    viewer: "مشاهد",
+    accessDenied: "تم رفض الوصول",
+    insufficientPermissions: "صلاحيات غير كافية",
+    roleDescription: "يحدد مستوى وصول المستخدم"
   }
 };
 
