@@ -4,6 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "./context/auth-context";
+import { LanguageProvider } from "./context/language-context";
 
 // Pages
 import Dashboard from "@/pages/dashboard";
@@ -65,10 +66,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router />
-        <Toaster />
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <Router />
+          <Toaster />
+        </AuthProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }
