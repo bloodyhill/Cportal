@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userFormSchema, type User } from "@shared/schema";
 import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -541,6 +542,3 @@ export default function Settings() {
     </div>
   );
 }
-
-// Add zod import
-import { z } from "zod";
