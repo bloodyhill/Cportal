@@ -45,14 +45,20 @@ export function OrderForm({ open, onOpenChange, order, isEdit = false }: OrderFo
   async function onSubmit(data: InsertOrder) {
     setIsSubmitting(true);
     try {
+      // Convert date object to ISO string for API submission
+      const formattedData = {
+        ...data,
+        orderDate: data.orderDate instanceof Date ? data.orderDate.toISOString() : data.orderDate,
+      };
+      
       if (isEdit && order) {
-        await apiRequest("PUT", `/api/orders/${order.id}`, data);
+        await apiRequest("PUT", `/api/orders/${order.id}`, formattedData);
         toast({
           title: "Order updated",
           description: "Order has been updated successfully",
         });
       } else {
-        await apiRequest("POST", `/api/orders`, data);
+        await apiRequest("POST", `/api/orders`, formattedData);
         toast({
           title: "Order created",
           description: "New order has been created successfully",

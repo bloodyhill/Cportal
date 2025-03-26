@@ -42,8 +42,6 @@ export default function Header({ currentPage }: HeaderProps) {
             <span className={`material-icons absolute ${isRTL ? 'right-3' : 'left-3'} top-2 text-neutral-400 dark:text-neutral-500`}>search</span>
           </div>
           
-          <LanguageToggle className="mx-2" />
-          
           <div className="relative">
             <button 
               className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-700"
@@ -52,8 +50,6 @@ export default function Header({ currentPage }: HeaderProps) {
               <span className="material-icons text-neutral-500 dark:text-neutral-300">notifications</span>
             </button>
           </div>
-          
-          <ModeToggle className="hidden md:block" />
           
           {user && (
             <div className="relative">
