@@ -75,6 +75,14 @@ export default function Settings() {
 
   async function onProfileSubmit(data: ProfileFormValues) {
     if (!user) return;
+    if (!hasPermission(user, "edit_profile")) {
+      toast({
+        title: "Access denied",
+        description: "You don't have permission to edit your profile",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsUpdatingProfile(true);
     try {
@@ -99,6 +107,14 @@ export default function Settings() {
 
   async function onPasswordSubmit(data: PasswordFormValues) {
     if (!user) return;
+    if (!hasPermission(user, "change_password")) {
+      toast({
+        title: "Access denied",
+        description: "You don't have permission to change your password",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsUpdatingPassword(true);
     try {
@@ -145,6 +161,16 @@ export default function Settings() {
   };
 
   const handleAddUser = async () => {
+    if (!user) return;
+    if (!hasPermission(user, "manage_users")) {
+      toast({
+        title: "Access denied",
+        description: "You don't have permission to add new users",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!newUserForm.username || !newUserForm.password || !newUserForm.name || !newUserForm.email) {
       toast({
         title: "Missing fields",
@@ -184,6 +210,16 @@ export default function Settings() {
   };
 
   const handleDeleteUser = async (userId: number) => {
+    if (!user) return;
+    if (!hasPermission(user, "manage_users")) {
+      toast({
+        title: "Access denied",
+        description: "You don't have permission to delete users",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (userId === user?.id) {
       toast({
         title: "Cannot delete",
@@ -227,7 +263,7 @@ export default function Settings() {
         <TabsList className="mb-4">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
-          {user?.role === "admin" && (
+          {hasPermission(user, "manage_users") && (
             <TabsTrigger value="users">User Management</TabsTrigger>
           )}
         </TabsList>
@@ -373,7 +409,7 @@ export default function Settings() {
           </Card>
         </TabsContent>
 
-        {user?.role === "admin" && (
+        {hasPermission(user, "manage_users") && (
           <TabsContent value="users">
             <Card className="mb-6">
               <CardHeader>
